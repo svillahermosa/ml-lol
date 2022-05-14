@@ -13,9 +13,9 @@ def get_info_from_match(summoner_name):
     driver.implicitly_wait(10)
     driver.maximize_window()
 
-    summoner_name = summoner_name.replace(' ', '+')
+    summoner_name_search = summoner_name.replace(' ', '+')
 
-    driver.get(f"https://www.leagueofgraphs.com/es/summoner/euw/{summoner_name}")
+    driver.get(f"https://www.leagueofgraphs.com/es/summoner/euw/{summoner_name_search}")
 
     flag_ver_mas = 1
     while flag_ver_mas:
@@ -32,9 +32,14 @@ def get_info_from_match(summoner_name):
     for elem in elems:
         list_href_partidas.append(elem.get_attribute("href"))
     list_href_partidas = set(list_href_partidas)
-    partidas_jugadores_rango = {'pk_partida': [], 'jugador': [], 'rango': []}
+    partidas_jugadores_rango = {'pk_partida': [], 'jugador': [], 'rango': [], 'lps': []}
     for url in list_href_partidas:
         driver.get(url)
+        lps = driver.find_elements(By.CLASS_NAME, 'number.solo-number')
+        lp_result = ''
+        for lp in lps:
+            if lp.text:
+                lp_result = lp.text
         box = driver.find_element(By.CLASS_NAME, 'data_table.matchTable')
         jugadores = box.find_elements(By.XPATH, '//a[contains(@href,"/es/summoner/euw")]')
         jugadores_rango = {}
@@ -47,12 +52,14 @@ def get_info_from_match(summoner_name):
         partida_pk.sort()
         partida_pk = '_'.join(partida_pk)
         for jugador, rango in jugadores_rango.items():
+            if jugador.lower() != summoner_name.lower():
+                continue
             partidas_jugadores_rango['pk_partida'].append(partida_pk)
             partidas_jugadores_rango['jugador'].append(jugador)
             partidas_jugadores_rango['rango'].append(rango)
+            partidas_jugadores_rango['lps'].append(lp_result)
 
     return pd.DataFrame().from_dict(partidas_jugadores_rango)
 
 
 
-df = get_info_from_match('gg fructis')

@@ -9,12 +9,10 @@ def get_data_from_account(account_name):
         lol_watcher = LolWatcher(API_KEY)
 
         summoner = lol_watcher.summoner.by_name(REGION, account_name)
-        summoner_league = lol_watcher.league.by_summoner(REGION, summoner['id'])
-        # my_ranked_stats = lol_watcher.league.by_summoner(REGION, summoner['id'])
 
-        summoner_matches = lol_watcher.match.matchlist_by_puuid(REGION, summoner['puuid'], queue=420, count=1)
+        summoner_matches = lol_watcher.match.matchlist_by_puuid(REGION, summoner['puuid'], queue=420, count=100)
         print(len(summoner_matches))
-        df = get_player_data_from_matches(lol_watcher, summoner_matches, summoner['puuid'], summoner_league)
+        df = get_player_data_from_matches(lol_watcher, summoner_matches, summoner['puuid'])
         return df
     except Exception as error:
         print(f"Error al tratar los partidos de la cuenta {account_name}: {str(error)}")
@@ -47,21 +45,32 @@ def get_player_data_fields_from_match(match_result, match_detail):
     return participants
 
 
-def get_player_data_from_matches(lol_watcher, player_matches, summoner, summoner_league):
+def get_player_data_from_matches(lol_watcher, player_matches, summoner):
     match_result_list = []
     for match in player_matches:
         try :
             match_detail = lol_watcher.match.by_id(REGION, match)
             match_result = {}
             match_result['puuid_current_summoner'] = summoner
-            match_result['queue'] = summoner_league[0]['queueType']
-            match_result['tier'] = summoner_league[0]['tier']
-            match_result['rank'] = summoner_league[0]['rank']
+            match_result['id_match'] = match
             participants = get_player_data_fields_from_match(match_result, match_detail)
 
             match_result_list += participants
         except Exception as error:
             print(f"fallo al obtener la partida {match}. Error: {str(error)}")
     df = pd.DataFrame(match_result_list)
+    return df
+
+
+def assign_pk_to_df(df):
+    dic_match = {}
+    for name, group in df.groupby('id_match'):
+        list_names = []
+        for index, match in group.iterrows():
+            list_names.append(match.summonerName)
+        list_names.sort()
+        pk_names = '_'.join(list_names)
+        dic_match[name] = pk_names
+    df = df.replace(dic_match)
     return df
 
