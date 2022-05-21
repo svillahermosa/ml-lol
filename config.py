@@ -1,4 +1,4 @@
-API_KEY = 'RGAPI-213fde17-e66c-4ecd-9abc-860548c73ca7'
+API_KEY = 'RGAPI-0fc08593-f5f0-408b-9bd4-79f70da54ce5'
 REGION = 'euw1'
 
 LIST_FIELDS = ['summonerName',

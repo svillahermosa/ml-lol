@@ -10,7 +10,14 @@ def get_data_from_account(account_name):
 
         summoner = lol_watcher.summoner.by_name(REGION, account_name)
 
-        summoner_matches = lol_watcher.match.matchlist_by_puuid(REGION, summoner['puuid'], queue=420, count=100)
+        total_partidas_obtenidas = False
+        summoner_matches = []
+        indice = 0
+        while not total_partidas_obtenidas:
+            summoner_matches += lol_watcher.match.matchlist_by_puuid(REGION, summoner['puuid'], queue=420, count=100, start=indice)
+            indice += 100
+            if indice > 300:
+                total_partidas_obtenidas = True
         print(len(summoner_matches))
         df = get_player_data_from_matches(lol_watcher, summoner_matches, summoner['puuid'])
         return df
@@ -21,8 +28,6 @@ def get_data_from_account(account_name):
 
 def get_challenge_fields(match_result, participant):
     for key_challenge in participant[key].keys():
-        if key_challenge not in LIST_FIELDS:
-            continue
         match_result[key_challenge] = participant[key][key_challenge]
 
 
@@ -31,7 +36,7 @@ def get_participant_fields(match_result, participant):
     for key in participant.keys():
         if key == 'challenges':
             get_challenge_fields(match_result, participant)
-        elif key in LIST_FIELDS:
+        else:
             match_result[key] = participant[key]
 
 
@@ -53,6 +58,7 @@ def get_player_data_from_matches(lol_watcher, player_matches, summoner):
             match_result = {}
             match_result['puuid_current_summoner'] = summoner
             match_result['id_match'] = match
+            match_result['ts_fecha'] = match_detail['info']['gameStartTimestamp']
             participants = get_player_data_fields_from_match(match_result, match_detail)
 
             match_result_list += participants
@@ -67,7 +73,9 @@ def assign_pk_to_df(df):
     for name, group in df.groupby('id_match'):
         list_names = []
         for index, match in group.iterrows():
-            list_names.append(match.summonerName)
+            summoner = match.summonerName.strip()
+            summoner = summoner.replace('  ', ' ')
+            list_names.append(summoner)
         list_names.sort()
         pk_names = '_'.join(list_names)
         dic_match[name] = pk_names

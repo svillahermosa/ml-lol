@@ -58,7 +58,7 @@ def get_info_from_match(summoner_name):
             partidas_jugadores_rango['jugador'].append(jugador)
             partidas_jugadores_rango['rango'].append(rango)
             partidas_jugadores_rango['lps'].append(lp_result)
-
+    driver.close()
     return pd.DataFrame().from_dict(partidas_jugadores_rango)
 
 
