@@ -63,7 +63,7 @@ LIST_FIELDS = ['summonerName',
                'challenge_junglerKillsEarlyJungle']
 
 LOL_DIVISIONS = {'Hierro IV': 0, 'Hierro III': 1, 'Hierro II': 2, 'Hierro I': 3 , 'Bronce IV': 4, 'Bronce III': 5,
-                 'Bronce II': 6, 'Bronce I': 7, 'Plata VI': 8, 'Plata III': 9, 'Plata II': 10, 'Plata I': 11,
-                 'Oro VI': 12, 'Oro III': 13, 'Oro II': 14, 'Oro I': 15, 'Platino IV': 16, 'Platino III': 17,
+                 'Bronce II': 6, 'Bronce I': 7, 'Plata IV': 8, 'Plata III': 9, 'Plata II': 10, 'Plata I': 11,
+                 'Oro IV': 12, 'Oro III': 13, 'Oro II': 14, 'Oro I': 15, 'Platino IV': 16, 'Platino III': 17,
                  'Platino II': 18, 'Platino I': 19, 'Diamante IV': 20, 'Diamante III': 21, 'Diamante II': 22,
                  'Diamante I': 23, 'Master': 24, 'GrandMaster': 25, 'Challenger': 26}
