@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 import pandas as pd
 from selenium.webdriver import ActionChains
 import time
+from config import NUMBER_OF_GAMES
+from selenium.webdriver.support.ui import Select
 
 
 def get_info_from_match(summoner_name):
@@ -17,21 +19,31 @@ def get_info_from_match(summoner_name):
 
     driver.get(f"https://www.leagueofgraphs.com/es/summoner/euw/{summoner_name_search}")
 
-    flag_ver_mas = 1
-    while flag_ver_mas:
+    filter = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "recentGamesFilterExpander")))
+    ActionChains(driver).click(filter).perform()
+
+    element = driver.find_elements(By.CLASS_NAME, 'recentGamesFilter')
+    ActionChains(driver).click(element[1]).perform()
+
+    select = driver.find_elements(By.XPATH, '//*[@id="drop-queueTypes-recentgames"]/ul/li[4]/a')
+    ActionChains(driver).click(select[0]).perform()
+    flag_ver_mas = 10
+    while flag_ver_mas < NUMBER_OF_GAMES:
         try:
 
             search_field = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, "see_more_ajax_button")))
             ActionChains(driver).click(search_field).perform()
+            flag_ver_mas += 10
         except:
             flag_ver_mas = 0
-
+    time.sleep(2)
     tabla_partidas = driver.find_element(By.CLASS_NAME, value="data_table.relative.recentGamesTable.inverted_rows_color")
     elems = tabla_partidas.find_elements(By.XPATH, value='//a[contains(@href,"/es/match/euw")]')
     list_href_partidas = []
     for elem in elems:
         list_href_partidas.append(elem.get_attribute("href"))
     list_href_partidas = set(list_href_partidas)
+    list_href_partidas = list(list_href_partidas)[:NUMBER_OF_GAMES]
     partidas_jugadores_rango = {'pk_partida': [], 'jugador': [], 'rango': [], 'lps': []}
     for url in list_href_partidas:
         driver.get(url)

@@ -1,7 +1,21 @@
 from riotwatcher import LolWatcher, ApiError
 import pandas as pd
-from config import API_KEY, REGION, LIST_FIELDS
+from config import API_KEY, REGION, LIST_FIELDS, NUMBER_OF_GAMES
 import copy
+
+def get_data_from_account_max_100(account_name):
+    try:
+        lol_watcher = LolWatcher(API_KEY)
+
+        summoner = lol_watcher.summoner.by_name(REGION, account_name)
+        summoner_matches = []
+        summoner_matches += lol_watcher.match.matchlist_by_puuid(REGION, summoner['puuid'], queue=420, count=NUMBER_OF_GAMES)
+        print(f'partidas descargadas: {len(summoner_matches)}')
+        df = get_player_data_from_matches(lol_watcher, summoner_matches, summoner['puuid'])
+        return df
+    except Exception as error:
+        print(f"Error al tratar los partidos de la cuenta {account_name}: {str(error)}")
+        return pd.DataFrame()
 
 
 def get_data_from_account(account_name):
@@ -14,7 +28,7 @@ def get_data_from_account(account_name):
         summoner_matches = []
         indice = 0
         while not total_partidas_obtenidas:
-            summoner_matches += lol_watcher.match.matchlist_by_puuid(REGION, summoner['puuid'], queue=420, count=100, start=indice)
+            summoner_matches += lol_watcher.match.matchlist_by_puuid(REGION, summoner['puuid'], queue=420, count=NUMBER_OF_GAMES, start=indice)
             indice += 100
             if indice > 300:
                 total_partidas_obtenidas = True
@@ -28,7 +42,7 @@ def get_data_from_account(account_name):
 
 def get_challenge_fields(match_result, participant):
     for key_challenge in participant[key].keys():
-        match_result[key_challenge] = participant[key][key_challenge]
+        match_result[key_challenge] = participant[key][key_challenge] if not isinstance(participant[key][key_challenge], str) else participant[key][key_challenge].strip()
 
 
 def get_participant_fields(match_result, participant):
@@ -37,7 +51,7 @@ def get_participant_fields(match_result, participant):
         if key == 'challenges':
             get_challenge_fields(match_result, participant)
         else:
-            match_result[key] = participant[key]
+            match_result[key] = participant[key] if not isinstance(participant[key], str) else participant[key].strip()
 
 
 

@@ -2,7 +2,8 @@ import pandas as pd
 from config import LOL_DIVISIONS
 
 if __name__ == '__main__':
-    df = pd.read_csv(r"C:\DevelopmentLaLiga\ml-lol\extracts\full.tsv", sep='\t')
+    df = pd.read_csv(r"C:\Users\Carlos\OneDrive\Escritorio\ML\ml-lol\extracts\full.tsv", sep='\t')
+    # df.drop(columns=['Unnamed: 0.2', 'Unnamed: 0.1', 'Unnamed: 0'], inplace=True)
     df_2 = df.sort_values('ts_fecha').groupby('jugador').tail(1)
     current_player_division = {}
     for index, row in df_2.iterrows():
@@ -15,4 +16,4 @@ if __name__ == '__main__':
         else:
             df.loc[index, 'smurf'] = 0
     df['smurf'] = df['smurf'].astype(int)
-    df.to_csv(r"C:\DevelopmentLaLiga\ml-lol\extracts\full.tsv", sep='\t')
+    df.to_csv(r"C:\Users\Carlos\OneDrive\Escritorio\ML\ml-lol\extracts\full.tsv", sep='\t')
