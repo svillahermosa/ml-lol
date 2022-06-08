@@ -27,10 +27,12 @@ def get_data_from_account(account_name):
         total_partidas_obtenidas = False
         summoner_matches = []
         indice = 0
+        count_param = 100 if NUMBER_OF_GAMES > 100 else NUMBER_OF_GAMES
         while not total_partidas_obtenidas:
-            summoner_matches += lol_watcher.match.matchlist_by_puuid(REGION, summoner['puuid'], queue=420, count=NUMBER_OF_GAMES, start=indice)
-            indice += 100
-            if indice > 300:
+            summoner_matches += lol_watcher.match.matchlist_by_puuid(REGION, summoner['puuid'], queue=420, count=count_param, start=indice)
+            count_param = 100 if NUMBER_OF_GAMES > indice+200 else NUMBER_OF_GAMES%100
+            indice += 100 if NUMBER_OF_GAMES > 100 else NUMBER_OF_GAMES
+            if indice >= NUMBER_OF_GAMES:
                 total_partidas_obtenidas = True
         print(len(summoner_matches))
         df = get_player_data_from_matches(lol_watcher, summoner_matches, summoner['puuid'])

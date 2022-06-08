@@ -11,8 +11,10 @@ from config import LIST_FIELDS
 def get_last_10_games_account(account):
     df_final = pd.DataFrame()
     print(f'INIT - Obteniendo datos de: {account}')
-    df = get_data_from_account_max_100(account)
+    df = get_data_from_account(account)
+    print(f'datos obtenidos')
     df_with_pk = assign_pk_to_df(df)
+    print(f'obtener datos scraping')
     df_rank = get_info_from_match(account)
     df_merged = pd.merge(df_with_pk, df_rank, left_on='id_match', right_on='pk_partida', how='left')
     df_merged = df_merged.loc[df_merged.summonerName == account]
@@ -59,7 +61,7 @@ def get_calculated_fields(df_account):
 
 
 def get_model_trained():
-    df = pd.read_csv(r"extracts/full_prepared.tsv", sep='\t')
+    df = pd.read_csv(r"extracts/full_prepared2.tsv", sep='\t')
     X = df.loc[:, df.columns != 'smurf']
     Y = df['smurf']
     seed = 7
@@ -87,7 +89,7 @@ def lp_treatment(row_lp):
 
 if __name__ == '__main__':
     # 'Niceyneckian'
-    account = 'IfoundmynoseXD'
+    account = 'gg fructis'
     df_account = get_last_10_games_account(account)
     df_calculated = get_calculated_fields(df_account)
 
