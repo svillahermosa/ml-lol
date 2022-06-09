@@ -9,7 +9,6 @@ from sklearn.metrics import accuracy_score
 from config import LIST_FIELDS
 
 def get_last_10_games_account(account):
-    df_final = pd.DataFrame()
     print(f'INIT - Obteniendo datos de: {account}')
     df = get_data_from_account(account)
     print(f'datos obtenidos')
@@ -20,7 +19,7 @@ def get_last_10_games_account(account):
     df_merged = df_merged.loc[df_merged.summonerName == account]
     df_merged = df_merged.loc[df_merged.pk_partida.notnull()]
     print(f'END - Obteniendo datos de: {account}')
-    return pd.concat([df_final, df_merged])
+    return df_merged
 
 def get_calculated_fields(df_account):
     df_full = df_account
@@ -72,12 +71,12 @@ def get_model_trained():
     model = XGBClassifier()
     model.fit(X_train, y_train)
 
-    y_pred = model.predict(X_test)
-    predictions = [round(value) for value in y_pred]
-    # evaluate predictions
-    accuracy = accuracy_score(y_test, predictions)
-    print("Accuracy: %.2f%%" % (accuracy * 100.0))
-    print(classification_report(y_test, y_pred))
+    # y_pred = model.predict(X_test)
+    # predictions = [round(value) for value in y_pred]
+    # # evaluate predictions
+    # accuracy = accuracy_score(y_test, predictions)
+    # print("Accuracy: %.2f%%" % (accuracy * 100.0))
+    # print(classification_report(y_test, y_pred))
     return model
 
 

@@ -1,4 +1,4 @@
-API_KEY = 'RGAPI-c787d730-9eac-4154-9fc6-7c96a18b6506'
+API_KEY = 'RGAPI-ff494d20-f42a-4995-9a6e-4e4d33bdf7e8'
 REGION = 'euw1'
 
 LIST_FIELDS = ['puuid_current_summoner', 'id_match', 'championName', 'lane', 'perks', 'puuid', 'role', 'summonerId',
@@ -174,4 +174,4 @@ LOL_DIVISIONS = {'Hierro IV': 0, 'Hierro III': 1, 'Hierro II': 2, 'Hierro I': 3,
                  'Platino II': 18, 'Platino I': 19, 'Diamante IV': 20, 'Diamante III': 21, 'Diamante II': 22,
                  'Diamante I': 23, 'Master': 24, 'GrandMaster': 25, 'Challenger': 26}
 
-NUMBER_OF_GAMES = 150
+NUMBER_OF_GAMES = 20
