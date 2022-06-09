@@ -60,7 +60,7 @@ def get_calculated_fields(df_account):
 
 
 def get_model_trained():
-    df = pd.read_csv(r"extracts/full_prepared2.tsv", sep='\t')
+    df = pd.read_csv(r"C:\Users\Carlos\OneDrive\Escritorio\ML\ml-lol\extracts\full_prepared2.tsv", sep='\t')
     X = df.loc[:, df.columns != 'smurf']
     Y = df['smurf']
     seed = 7

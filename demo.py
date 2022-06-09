@@ -4,17 +4,14 @@ from check_smurf import get_model_trained
 
 
 def demo():
-    lista_jugadores = ['elmi uwu69', 'HandSoIo', 'PEŁUK1NG', 'SK Eckas', 'vladi1v9', '1keduii1', 'FakeRookie1', 'Jonah Falcon', 'El Hookeru']
+    lista_jugadores = ['elmi uwu69', 'HandSoIo', 'PEŁUK1NG', 'SK Eckas', 'vladi1v9', '1keduii1', 'FakeRookie1', 'Jonah Falcon', 'El Hookeru', 'Go Ha Go Ha']
 
-    dic_df_jugadores = {'summonerName':[], 'percentage': []}
-
-    df_full = pd.read_csv(fr"extracts/full_prepared2.tsv", sep='\t')
-    columns = list(df_full.columns)
+    dic_df_jugadores = {'summonerName': [], 'percentage': []}
 
     model = get_model_trained()
 
     for jugador in lista_jugadores:
-        df = pd.read_csv(fr"extracts/{jugador}.tsv", sep='\t')
+        df = pd.read_csv(fr"C:\Users\Carlos\OneDrive\Escritorio\ML\ml-lol\extracts/{jugador}.tsv", sep='\t')
         predictions = model.predict(df)
         total_score = 0
         for pred in predictions:

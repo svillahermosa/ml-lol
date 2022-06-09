@@ -19,4 +19,5 @@ from Interface.django_project.app.main.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', base, name='base'),
+    path('smurf/ajax/calculate_table', calculate_table, name='smurf')
 ]

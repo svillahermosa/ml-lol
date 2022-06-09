@@ -1,0 +1,15 @@
+<thead>
+<tr class="table-success">
+    <th style="text-align:center">Summoner Name</th>
+    <th style="text-align:center">Smurf Percentage</th>
+</tr>
+</thead>
+<tbody>
+{% for index, field in data.iterrows %}
+<tr class="table-success">
+         <td style="text-align:center">{{ field.summonerName }}</td>
+         <td style="text-align:center">{{ field.percentage }}</td>
+</tr>
+
+{% endfor %}
+</tbody>
