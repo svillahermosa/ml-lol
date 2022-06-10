@@ -22,6 +22,7 @@ def base(request, *args, **kwargs):
 def calculate_table(request, *args, **kwargs):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         df_table = demo()
+        df_table['percentage'] = df_table['percentage'].round(2)
         params = request.body.decode()
         if 'table1' in params:
             data = df_table.iloc[:5]

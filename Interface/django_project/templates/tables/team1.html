@@ -6,10 +6,21 @@
 </thead>
 <tbody>
 {% for index, field in data.iterrows %}
-<tr class="table-success">
+         {% if field.percentage >= 70 %}
+        <tr class="table-success">
+         <td style="text-align:center; background-color: #ff000042">{{ field.summonerName }}</td>
+         <td style="text-align:center;  background-color: #ff000042">{{ field.percentage }}</td>
+         </tr>
+         {% elif field.percentage < 70  and field.percentage > 40 %}
+        <tr class="table-success">
+         <td style="text-align:center; background-color: #ffff0052">{{ field.summonerName }}</td>
+         <td style="text-align:center; background-color: #ffff0052">{{ field.percentage }}</td>
+         </tr>
+         {% else %}
+        <tr class="table-success">
          <td style="text-align:center">{{ field.summonerName }}</td>
          <td style="text-align:center">{{ field.percentage }}</td>
-</tr>
-
+         </tr>
+        {% endif %}
 {% endfor %}
 </tbody>
